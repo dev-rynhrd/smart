@@ -1,0 +1,384 @@
+/* Plus Jakarta Sans Font - must be at top */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&display=swap');
+
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@plugin "tailwindcss-animate";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+:root {
+  /* Base radius - rounded-xl (12px) for cards */
+  --radius: 0.75rem;
+
+  /* SMART Design Token System - Light Mode */
+  /* Background: Slate 50 - Very subtle cool grey/white base */
+  --background: #F8FAFC;
+
+  /* Foreground (Surface): White - For cards and raised elements */
+  --foreground: #0F172A;
+
+  /* Card: White surface */
+  --card: #FFFFFF;
+  --card-foreground: #0F172A;
+
+  /* Popover */
+  --popover: #FFFFFF;
+  --popover-foreground: #0F172A;
+
+  /* Primary: Indigo 600 - Core brand color */
+  --primary: #4F46E5;
+  --primary-foreground: #FFFFFF;
+
+  /* Secondary: Violet 600 - For gradients and accents */
+  --secondary: #7C3AED;
+  --secondary-foreground: #FFFFFF;
+
+  /* Muted backgrounds */
+  --muted: #F1F5F9;
+  --muted-foreground: #64748B;
+
+  /* Accent: Emerald 500 - For success/trend up */
+  --accent: #10B981;
+  --accent-foreground: #FFFFFF;
+
+  /* Destructive */
+  --destructive: #EF4444;
+
+  /* Border: Slate 200 - Subtle separation */
+  --border: #E2E8F0;
+  --input: #E2E8F0;
+  --ring: #4F46E5;
+
+  /* Chart colors - Indigo/Violet palette */
+  --chart-1: #4F46E5;
+  --chart-2: #7C3AED;
+  --chart-3: #10B981;
+  --chart-4: #F59E0B;
+  --chart-5: #EC4899;
+
+  /* Sidebar */
+  --sidebar: #FFFFFF;
+  --sidebar-foreground: #0F172A;
+  --sidebar-primary: #4F46E5;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #F1F5F9;
+  --sidebar-accent-foreground: #0F172A;
+  --sidebar-border: #E2E8F0;
+  --sidebar-ring: #4F46E5;
+}
+
+.dark {
+  /* Dark Mode - Indigo/Violet themed */
+  --background: #0F172A;
+  --foreground: #F8FAFC;
+
+  --card: #1E293B;
+  --card-foreground: #F8FAFC;
+
+  --popover: #1E293B;
+  --popover-foreground: #F8FAFC;
+
+  --primary: #818CF8;
+  --primary-foreground: #0F172A;
+
+  --secondary: #A78BFA;
+  --secondary-foreground: #0F172A;
+
+  --muted: #1E293B;
+  --muted-foreground: #94A3B8;
+
+  --accent: #34D399;
+  --accent-foreground: #0F172A;
+
+  --destructive: #F87171;
+
+  --border: #334155;
+  --input: #334155;
+  --ring: #818CF8;
+
+  --chart-1: #818CF8;
+  --chart-2: #A78BFA;
+  --chart-3: #34D399;
+  --chart-4: #FBBF24;
+  --chart-5: #F472B6;
+
+  --sidebar: #1E293B;
+  --sidebar-foreground: #F8FAFC;
+  --sidebar-primary: #818CF8;
+  --sidebar-primary-foreground: #0F172A;
+  --sidebar-accent: #334155;
+  --sidebar-accent-foreground: #F8FAFC;
+  --sidebar-border: #334155;
+  --sidebar-ring: #818CF8;
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Typography - Major Third Scale (1.250) with responsive clamp */
+  h1 {
+    font-size: clamp(1.5rem, 4vw, 2.25rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
+  h2 {
+    font-size: clamp(1.25rem, 3.5vw, 1.875rem);
+    font-weight: 700;
+    line-height: 1.1;
+  }
+
+  h3 {
+    font-size: clamp(1.125rem, 3vw, 1.5rem);
+    font-weight: 700;
+    line-height: 1.25;
+  }
+
+  h4 {
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    font-weight: 600;
+    line-height: 1.25;
+  }
+
+  h5 {
+    font-size: 1.125rem;
+    font-weight: 600;
+  }
+
+  h6 {
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  p {
+    line-height: 1.625;
+  }
+}
+
+/* Colored Shadow System */
+.shadow-card {
+  box-shadow: 0 4px 20px -2px rgba(79, 70, 229, 0.1);
+}
+
+.shadow-card-hover {
+  box-shadow:
+    0 10px 25px -5px rgba(79, 70, 229, 0.15),
+    0 8px 10px -6px rgba(79, 70, 229, 0.1);
+}
+
+.shadow-button {
+  box-shadow: 0 4px 14px 0 rgba(79, 70, 229, 0.3);
+}
+
+.shadow-glow {
+  box-shadow: 0 0 20px rgba(79, 70, 229, 0.5);
+}
+
+/* Gradient utilities */
+.bg-gradient-primary {
+  background: linear-gradient(to right, #4F46E5, #7C3AED);
+}
+
+.bg-gradient-primary-soft {
+  background: linear-gradient(to right, #E0E7FF, #EDE9FE);
+}
+
+.bg-gradient-dark {
+  background: linear-gradient(to bottom right, #312E81, #1E1B4B);
+}
+
+.text-gradient-primary {
+  background: linear-gradient(to right, #4F46E5, #7C3AED);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Card with hover effect */
+.card-elevated {
+  background-color: var(--card);
+  border-radius: 0.75rem;
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 20px -2px rgba(79, 70, 229, 0.1);
+  transition: all 0.3s ease;
+}
+
+.card-elevated:hover {
+  box-shadow:
+    0 10px 25px -5px rgba(79, 70, 229, 0.15),
+    0 8px 10px -6px rgba(79, 70, 229, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Button variants with colored shadows */
+.btn-primary {
+  background: linear-gradient(to right, #4F46E5, #7C3AED);
+  color: white;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  padding: 0.625rem 1.5rem;
+  box-shadow: 0 4px 14px 0 rgba(79, 70, 229, 0.3);
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+/* Background blobs for atmospheric depth */
+.blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(64px);
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.blob-primary {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(64px);
+  opacity: 0.3;
+  pointer-events: none;
+  background-color: #4F46E5;
+}
+
+.blob-secondary {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(64px);
+  opacity: 0.3;
+  pointer-events: none;
+  background-color: #7C3AED;
+}
+
+/* Gradient accent line */
+.gradient-line {
+  height: 4px;
+  background: linear-gradient(to right, #4F46E5, #7C3AED);
+}
+
+/* Animation helpers */
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.3s ease-out;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Responsive container utilities */
+.responsive-container {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.safe-scroll {
+  -webkit-overflow-scrolling: touch;
+  overflow-x: auto;
+  max-width: 100vw;
+}
+
+/* Mobile-first card padding adjustments */
+@media (max-width: 640px) {
+  .card-elevated {
+    border-radius: 0.5rem;
+  }
+
+  .card-elevated:hover {
+    transform: none;
+  }
+}
