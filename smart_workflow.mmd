@@ -1,0 +1,132 @@
+flowchart TD
+    START(("🚀 Start"))
+    
+    subgraph EMPLOYEE["👤 EMPLOYEE SIDE"]
+        E1["Buka Dashboard"]
+        E2["Pilih Menu 'New Request'"]
+        E3["Pilih Item ATK dari Katalog"]
+        E4["Input Quantity & Priority"]
+        E5["Add Notes jika perlu"]
+        E6{"Simpan sebagai Draft?"}
+        E7["Save as Draft"]
+        E8["Submit Request"]
+    end
+    
+    subgraph SYSTEM_SUBMIT["⚙️ SYSTEM PROCESS"]
+        S1["Generate Request Number"]
+        S2["Set Status = Pending"]
+        S3["Record History: Submitted"]
+        S4["Send Notification ke Asset Team"]
+    end
+    
+    subgraph ASSET_TEAM["👨‍💼 ASSET TEAM SIDE"]
+        A1["View Incoming Requests"]
+        A2["Open Request Detail"]
+        A3["Set Status = In Review"]
+        A4{"Check Stock Availability"}
+        
+        A5{"Keputusan"}
+        A6["✅ Approve Full"]
+        A7["⚠️ Approve Partial"]
+        A8["❌ Reject"]
+        
+        A9["Input Handler Notes"]
+        A10{"Perlu Restock?"}
+        A11["Info: Request PR via MSForm"]
+    end
+    
+    subgraph STOCK_PROCESS["📦 STOCK PROCESS"]
+        ST1["Reserve Stock"]
+        ST2["Update qty_reserved"]
+        ST3["Record Stock Movement"]
+    end
+    
+    subgraph READY_PICKUP["📤 READY FOR PICKUP"]
+        R1["Set Status = Ready"]
+        R2["Notify Employee"]
+        R3["Employee Datang Ambil Barang"]
+        R4["Asset Team Konfirmasi Pickup"]
+    end
+    
+    subgraph FULFILLMENT["✅ FULFILLMENT"]
+        F1["Reduce Stock Available"]
+        F2["Clear Reserved Stock"]
+        F3["Record Stock Out Movement"]
+        F4["Set Status = Completed"]
+        F5["Record History: Completed"]
+    end
+    
+    subgraph PARTIAL_CASE["⚠️ PARTIAL CASE"]
+        P1["Notify Employee: Partial Approved"]
+        P2{"Employee Butuh Sisanya?"}
+        P3["Beli Sendiri"]
+        P4["Submit Reimbursement"]
+    end
+    
+    REJECTED["❌ Request Rejected"]
+    CANCELLED["🚫 Request Cancelled"]
+    FINISH(("🏁 End"))
+    
+    %% Flow connections
+    START --> E1
+    E1 --> E2
+    E2 --> E3
+    E3 --> E4
+    E4 --> E5
+    E5 --> E6
+    E6 -->|Ya| E7
+    E7 -.->|"Edit Later"| E6
+    E6 -->|Tidak| E8
+    
+    E8 --> S1
+    S1 --> S2
+    S2 --> S3
+    S3 --> S4
+    
+    S4 --> A1
+    A1 --> A2
+    A2 --> A3
+    A3 --> A4
+    
+    A4 --> A5
+    A5 -->|"Stock Cukup"| A6
+    A5 -->|"Stock Kurang"| A7
+    A5 -->|Tolak| A8
+    
+    A6 --> A9
+    A7 --> A9
+    A8 --> REJECTED
+    
+    A9 --> A10
+    A10 -->|Ya| A11
+    A10 -->|Tidak| ST1
+    A11 --> ST1
+    
+    ST1 --> ST2
+    ST2 --> ST3
+    ST3 --> R1
+    
+    R1 --> R2
+    R2 --> R3
+    R3 --> R4
+    R4 --> F1
+    
+    F1 --> F2
+    F2 --> F3
+    F3 --> F4
+    F4 --> F5
+    
+    A7 --> P1
+    P1 --> P2
+    P2 -->|Ya| P3
+    P3 --> P4
+    P4 --> FINISH
+    P2 -->|Tidak| FINISH
+    
+    F5 --> FINISH
+    REJECTED --> FINISH
+    
+    %% Cancel flow
+    E7 -.->|Cancel| CANCELLED
+    S2 -.->|"Cancel by Employee"| CANCELLED
+    CANCELLED --> FINISH

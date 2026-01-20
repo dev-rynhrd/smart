@@ -1,0 +1,294 @@
+erDiagram
+    %% ==========================================
+    %% 🔗 EXTERNAL DATABASE: USER_HRIS
+    %% (Reference Only - Not Created Here)
+    %% ==========================================
+    
+    USER_HRIS-hrd_employee {
+        bigint id PK "FROM USER_HRIS"
+        varchar employee_id UK
+        varchar emploee_name
+        varchar email UK
+        bigint orgchart_id FK
+        int active
+        varchar phone
+    }
+    
+    USER_HRIS-hrd_orgchart {
+        bigint id PK "FROM USER_HRIS"
+        varchar org_code UK
+        varchar org_name
+    }
+    
+    %% ==========================================
+    %% 🟦 MASTER TABLES - ITEM (SMART DB)
+    %% ==========================================
+    
+    item_categories {
+        bigint id PK
+        varchar name "Alat Tulis, Kertas, dll"
+        varchar slug UK
+        text description
+        boolean is_active
+        timestamp created_at
+        timestamp updated_at
+    }
+    
+    items {
+        bigint id PK
+        bigint category_id FK
+        varchar name
+        varchar sku UK
+        text description
+        varchar unit
+        int unit_contents
+        int min_stock
+        int max_request_qty
+        varchar image_url
+        boolean is_active
+        timestamp created_at
+        timestamp updated_at
+    }
+    
+    %% ==========================================
+    %% 🟦 SUPPORT TABLES - REQUEST (SMART DB)
+    %% ==========================================
+    
+    request_statuses {
+        bigint id PK
+        varchar name UK "Pending, Approved, dll"
+        varchar slug UK "pending, approved, dll"
+        int sort_order
+        text description
+        boolean is_active
+        timestamp created_at
+        timestamp updated_at
+    }
+    
+    request_priorities {
+        bigint id PK
+        varchar name UK "Low, Normal, High, Urgent"
+        varchar slug UK "low, normal, high, urgent"
+        int sort_order
+        int sla_hours "SLA dalam jam"
+        text description
+        boolean is_active
+        timestamp created_at
+        timestamp updated_at
+    }
+    
+    request_item_statuses {
+        bigint id PK
+        varchar name UK "Pending, Approved, Partial"
+        varchar slug UK
+        int sort_order
+        text description
+        boolean is_active
+        timestamp created_at
+        timestamp updated_at
+    }
+    
+    request_actions {
+        bigint id PK
+        varchar name UK "Created, Submitted, Approved"
+        varchar slug UK "created, submitted, approved"
+        text description
+        boolean is_active
+        timestamp created_at
+        timestamp updated_at
+    }
+    
+    %% ==========================================
+    %% 🟦 SUPPORT TABLES - STOCK (SMART DB)
+    %% ==========================================
+    
+    stock_movement_types {
+        bigint id PK
+        varchar name UK "Stock In, Stock Out"
+        varchar slug UK "in, out, adjustment"
+        text description
+        boolean is_active
+        timestamp created_at
+        timestamp updated_at
+    }
+    
+    %% ==========================================
+    %% 🟦 SUPPORT TABLES - REIMBURSEMENT (SMART DB)
+    %% ==========================================
+    
+    reimbursement_reasons {
+        bigint id PK
+        varchar name UK "Partial Stock, Out of Stock"
+        varchar slug UK "partial_stock, out_of_stock"
+        text description
+        boolean is_active
+        timestamp created_at
+        timestamp updated_at
+    }
+    
+    reimbursement_statuses {
+        bigint id PK
+        varchar name UK "Pending, Approved, Paid"
+        varchar slug UK "pending, approved, paid"
+        int sort_order
+        text description
+        boolean is_active
+        timestamp created_at
+        timestamp updated_at
+    }
+    
+    %% ==========================================
+    %% 🟩 TRANSACTION TABLES (SMART DB)
+    %% ==========================================
+    
+    stocks {
+        bigint id PK
+        bigint item_id FK,UK
+        int qty_available
+        int qty_reserved
+        varchar location
+        timestamp last_restock_at
+        timestamp last_checkout_at
+        timestamp updated_at
+    }
+    
+    stock_movements {
+        bigint id PK
+        bigint stock_id FK
+        bigint request_id FK "nullable"
+        bigint movement_type_id FK
+        int qty
+        int qty_before
+        int qty_after
+        varchar reference_number
+        text notes
+        bigint created_by "USER_HRIS.users.id"
+        timestamp created_at
+    }
+    
+    requests {
+        bigint id PK
+        varchar request_number UK
+        bigint requester_id "USER_HRIS.users.id"
+        bigint department_id "USER_HRIS.departments.id"
+        bigint handler_id "USER_HRIS.users.id nullable"
+        bigint status_id FK
+        bigint priority_id FK
+        date needed_date
+        text purpose
+        text requester_notes
+        text handler_notes
+        timestamp submitted_at
+        timestamp reviewed_at
+        timestamp completed_at
+        timestamp created_at
+        timestamp updated_at
+    }
+    
+    request_items {
+        bigint id PK
+        bigint request_id FK
+        bigint item_id FK
+        int qty_requested
+        int qty_approved
+        int qty_fulfilled
+        bigint status_id FK
+        varchar unit_at_request
+        text notes
+        timestamp created_at
+        timestamp updated_at
+    }
+    
+    request_histories {
+        bigint id PK
+        bigint request_id FK
+        bigint action_id FK
+        bigint old_status_id FK "nullable"
+        bigint new_status_id FK "nullable"
+        text notes
+        json metadata
+        bigint action_by "USER_HRIS.users.id"
+        timestamp created_at
+    }
+    
+    reimbursements {
+        bigint id PK
+        varchar reimbursement_number UK
+        bigint request_id FK "nullable"
+        bigint user_id "USER_HRIS.users.id"
+        bigint department_id "USER_HRIS.departments.id"
+        varchar item_name
+        text item_description
+        int qty
+        decimal unit_price
+        decimal total_amount
+        date purchase_date
+        varchar receipt_file
+        bigint reason_id FK
+        text reason_notes
+        bigint status_id FK
+        bigint reviewed_by "USER_HRIS.users.id nullable"
+        timestamp reviewed_at
+        text reviewer_notes
+        timestamp created_at
+        timestamp updated_at
+    }
+    
+    %% ==========================================
+    %% RELATIONSHIPS - EXTERNAL (USER_HRIS)
+    %% ==========================================
+    
+    USER_HRIS-hrd_orgchart ||--o{ USER_HRIS-hrd_employee : "has many"
+    
+    %% ==========================================
+    %% RELATIONSHIPS - ITEM (SMART)
+    %% ==========================================
+    
+    item_categories ||--o{ items : "has many"
+    
+    %% ==========================================
+    %% RELATIONSHIPS - STOCK (SMART)
+    %% ==========================================
+    
+    items ||--|| stocks : "has one"
+    stocks ||--o{ stock_movements : "has many"
+    stock_movement_types ||--o{ stock_movements : "categorizes"
+    
+    %% ==========================================
+    %% RELATIONSHIPS - REQUEST (SMART)
+    %% ==========================================
+    
+    request_statuses ||--o{ requests : "has status"
+    request_priorities ||--o{ requests : "has priority"
+    
+    requests ||--o{ request_items : "contains"
+    items ||--o{ request_items : "requested in"
+    request_item_statuses ||--o{ request_items : "has status"
+    
+    requests ||--o{ request_histories : "has history"
+    request_actions ||--o{ request_histories : "action type"
+    request_statuses ||--o{ request_histories : "old status"
+    request_statuses ||--o{ request_histories : "new status"
+    
+    requests ||--o{ stock_movements : "triggers"
+    
+    %% ==========================================
+    %% RELATIONSHIPS - REIMBURSEMENT (SMART)
+    %% ==========================================
+    
+    requests ||--o{ reimbursements : "related to"
+    reimbursement_reasons ||--o{ reimbursements : "has reason"
+    reimbursement_statuses ||--o{ reimbursements : "has status"
+    
+    %% ==========================================
+    %% CROSS-DATABASE REFERENCES (Logical Only)
+    %% ==========================================
+    
+    USER_HRIS-hrd_employee ||--o{ requests : "requester"
+    USER_HRIS-hrd_employee ||--o{ requests : "handler"
+    USER_HRIS-hrd_orgchart ||--o{ requests : "from department"
+    USER_HRIS-hrd_employee ||--o{ request_histories : "action by"
+    USER_HRIS-hrd_employee ||--o{ stock_movements : "created by"
+    USER_HRIS-hrd_employee ||--o{ reimbursements : "submitted by"
+    USER_HRIS-hrd_employee ||--o{ reimbursements : "reviewed by"
+    USER_HRIS-hrd_orgchart ||--o{ reimbursements : "from department"
